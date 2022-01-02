@@ -1,7 +1,17 @@
-const mysql = require('mysql12');
+const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'class2014',
+    database: 'department'
+},
+console.log('connected to database')
+);
+
+// sets the prompts for the user to choose from
 function questions() {
     inquirer.prompt ({
         type: 'list',
@@ -52,4 +62,43 @@ function questions() {
         }
     })
     
+function viewDepartments() {
+    connection.query('SELECT * FROM department', (err, rows) => {
+        console.table(rows)
+        questions();
+    })
+}
+
+function viewRoles
+
+function viewEmployees
+
+function addDepartment( {
+    return inquirer.prompt ([
+        {
+            type: 'input',
+            name: 'newDepartment',
+            message: 'What department would you like to add?',
+            validate: newDepartment => {
+                if (newDepartment) {
+                    return true;
+                } else {
+                    console.log ('Please enter department');
+                    return false;
+                }
+            }
+        }
+    ]).then(answer => {
+        const sql = `INSERT INTO departments (dept_name)
+            VALUES (?)`;
+            
+    })
+})
+
+function addEmployee
+
+function addRole
+
+function deleteEmployee
+
 }
