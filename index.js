@@ -18,17 +18,10 @@ function questions() {
         name: 'choice',
         message: 'What would you like to do?',
         choices: [
-            "View all departments", 
-            "View all roles",
-            "View all employees", 
-            "Add a department", 
-            "Add a role", 
-            "Add an employee", 
-            "Update employee role",
-            "Delete employee", 
-            "Exit"
+            "View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update employee role", "Delete employee", "Exit"
         ]
     }).then(function (answer){
+        //https://www.w3schools.com/js/js_switch.asp
         switch (answer.action){
             case 'View all departments':
                 viewDepartments();
@@ -73,26 +66,15 @@ function viewRoles
 
 function viewEmployees
 
-function addDepartment( {
-    return inquirer.prompt ([
+function addDepartment(){
+    inquirer.prompt ([
         {
             type: 'input',
             name: 'newDepartment',
             message: 'What department would you like to add?',
-            validate: newDepartment => {
-                if (newDepartment) {
-                    return true;
-                } else {
-                    console.log ('Please enter department');
-                    return false;
-                }
-            }
-        }
+        },
     ]).then(answer => {
-        const sql = `INSERT INTO departments (dept_name)
-            VALUES (?)`;
-            
-    })
+       
 })
 
 function addEmployee

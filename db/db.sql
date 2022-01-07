@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS departments;
-CREATE DATABASE departments;
-USE departments;
+DROP DATABASE IF EXISTS department;
+CREATE DATABASE department;
+USE department;
