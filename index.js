@@ -5,12 +5,14 @@ const cTable = require('console.table');
 
 require('dotenv').config();
 
+// creates connection 
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'class2014',
     database: 'department'
-}
+},
+    console.log('Connected to the database')
 );
 
 // sets the prompts for the user to choose from
@@ -58,31 +60,27 @@ function startQuestions() {
     })
 
     function viewDepartments() {
-        connection.query("SELECT employee.first_name, employee.last_name, department.name AS Department FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id ORDER BY employee.id;",
-            function (err, res) {
-                if (err) throw err
-                console.table(res)
-                startQuestions()
-            })
+        db.query('SELECT * FROM departments', (err, rows) => {
+            console.table(rows)
+            startQuestions();
+        })
     }
 
     function viewAllRoles() {
-        connection.query("SELECT employee.first_name, employee.last_name, role.title AS Title FROM employee JOIN role ON employee.role_id = role.id;",
-            function (err, res) {
-                if (err) throw err
-                console.table(res)
-                startQuestions()
-            })
+        db.query('SELECT roles.*, departments.dept_name AS department FROM roles LEFT JOIN departments ON roles.department_id = departments.id', (err, rows) => {
+            console.table(rows)
+            startQuestions();
+        })
     }
 
     function viewAllEmployees() {
-        connection.query("SELECT 
-            function (err, res) {
-                if (err) throw err
-                console.table(res)
-                startQuestions()
+        db.query('SELECT employees.*, roles.job_title AS role, roles.salary, departments.dept_name AS departments FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.dept_id = departments.id',
+            (err, rows) => {
+                console.table(rows)
+                startQuestions();
             })
     }
+
     function addDepartment() {
         inquirer.prompt([
             {
@@ -120,7 +118,7 @@ function addEmployee() {
             choices: ["1", "2", "3", "4", "Null"]
         }
     ])
-    .then 
+        .then
 }
 
 function addRole() {
