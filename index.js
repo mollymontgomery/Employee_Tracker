@@ -1,6 +1,9 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const db = require("./db")
 const cTable = require('console.table');
+
+require('dotenv').config();
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -12,17 +15,17 @@ console.log('connected to database')
 );
 
 // sets the prompts for the user to choose from
-function questions() {
+function startQuestions() {
     inquirer.prompt ({
         type: 'list',
-        name: 'choice',
         message: 'What would you like to do?',
+        name: 'choice',
         choices: [
             "View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update employee role", "Delete employee", "Exit"
         ]
-    }).then(function (answer){
+    }).then(function(answer) {
         //https://www.w3schools.com/js/js_switch.asp
-        switch (answer.action){
+        switch (answer.choice){
             case 'View all departments':
                 viewDepartments();
                 break;
@@ -56,15 +59,15 @@ function questions() {
     })
     
 function viewDepartments() {
-    connection.query('SELECT * FROM department', (err, rows) => {
-        console.table(rows)
-        questions();
-    })
+    connection.query("SELECT employee.first_name, employee.last_name, department.name AS ")
+    
 }
 
 function viewRoles
 
-function viewEmployees
+function viewEmployees (){
+    db.find
+}
 
 function addDepartment(){
     inquirer.prompt ([
