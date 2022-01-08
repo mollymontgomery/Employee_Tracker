@@ -95,41 +95,41 @@ function startQuestions() {
         })
     }
 
-    function addEmployee() {
+    function addEmployee(){
         db.findAllRoles()
             .then(([rows]) => {
                 let roles = rows;
+                console.log(roles)
                 const rolesChoices = roles.map(({ id, job_title }) => ({
                     name: job_title,
                     value: id
                 }))
-                // get all roles and map over them inside the .then have your inquirer.prompt()
+
                 inquirer.prompt([
                     {
                         type: "input",
                         name: "first_name",
-                        message: "What is the employee's first name?"
+                        message: "What is the employee's first name?",
                     },
                     {
                         type: "input",
                         name: "last_name",
-                        message: "What is the employee's last name?"
+                        message: "What is the employee's last name?",
                     },
                     {
                         type: "list",
                         name: "role_id",
                         message: "What is the employee's role?",
                         choices: rolesChoices
-                    }
+                    },
                 ])
                     .then(employee => {
                         db.createEmployee(employee)
                             .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database`))
                             .then(() => startQuestions())
-                    });
-            });
-
-    }
+                    })
+            })
+    };
 
     function addRole() {
         db.findAllDepartments()
