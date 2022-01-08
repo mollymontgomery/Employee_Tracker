@@ -1,19 +1,12 @@
-const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const db = require("./db")
-const cTable = require('console.table');
 
-require('dotenv').config();
+init();
 
-// creates connection 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'class2014',
-    database: 'department'
-},
-    console.log('Connected to the database')
-);
+function init(){
+    console.log("Welcome to your employee management system!")
+    startQuestions()
+}
 
 // sets the prompts for the user to choose from
 function startQuestions() {
@@ -60,10 +53,12 @@ function startQuestions() {
     })
 
     function viewDepartments() {
-        db.query('SELECT * FROM departments', (err, rows) => {
-            console.table(rows)
-            startQuestions();
+        db.findAllDepartments()
+        .then(([rows])=>{
+            let departments = rows;
+            console.table(departments);
         })
+        .then(()=> startQuestions())
     }
 
     function viewAllRoles() {
@@ -73,27 +68,36 @@ function startQuestions() {
         })
     }
 
-    function viewAllEmployees() {
-        db.query('SELECT employees.*, roles.job_title AS role, roles.salary, departments.dept_name AS departments FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.dept_id = departments.id',
-            (err, rows) => {
-                console.table(rows)
-                startQuestions();
-            })
+    function viewEmployees() {
+       db.findAllEmployees()
+       .then(([rows])=>{
+           let employees = rows;
+
+           console.table(employees);
+       })
+       .then(()=> startQuestions())
     }
 
     function addDepartment() {
         inquirer.prompt([
             {
                 type: 'input',
-                name: 'newDepartment',
-                message: 'What department would you like to add?',
-            },
-        ]).then(
-        }
+                name: 'department_name',
+                message: 'What is the name of the department would you like to add?',
+            }
+        ]).then(response =>{
+            let name = response;
+            db.createDepartment(name)
+            .then(()=> console.log(`Added ${name.department_name} to the database`))
+            .then(()=> startQuestions())
+        })
+        
 
-})
+}
 
 function addEmployee() {
+
+    // get all roles and map over them inside the .then have your inquirer.prompt()
     inquirer.prompt([
         {
             type: "input",
@@ -110,36 +114,56 @@ function addEmployee() {
             name: "role_id",
             message: "What is the employee's role?",
             choices: rolesChoices
-        },
-        {
-            type: "list",
-            name: "manager_id",
-            message: "Who is the employee's manager?",
-            choices: ["1", "2", "3", "4", "Null"]
         }
     ])
-        .then
+        .then()
 }
 
 function addRole() {
-    inquirer.prompt([
-        {
-            name: "job_title",
-            message: "What is the title of the role?"
-        },
-        {
-            name: "salary",
-            message: "What is the salary of the role?"
-        },
-        {
-            type: "list",
-            name: "department_id",
-            message: "What department does this role belong to?",
-            choices: departmentChoices
-        },
-    ])
-        .then()
+    db.findAllDepartments()
+    .then(([rows])=>{
+        let departments = rows;
+        const departmentChoices = departments.map(({ id, department_name })=> ({
+            name: department_name,
+            value: id
+        }));
+
+        inquirer.prompt([
+            {
+                name: "job_title",
+                message: "What is the title of the role?"
+            },
+            {
+                name: "salary",
+                message: "What is the salary of the role?"
+            },
+            {
+                type: "list",
+                name: "department_id",
+                message: "What department does this role belong to?",
+                choices: departmentChoices
+            },
+        ])
+            .then(role =>{
+                db.createRole(role)
+                .then(()=> console.log(`Added ${role.job_title} to the database`))
+            .then(()=> startQuestions())
+            })
+
+    })
+   
+
+}
 
 }
 
 
+// UPDATE EMP ROLE
+
+// 1 get all emps map over emps like youve done before
+
+// 2 findAllRoles and map over them 
+
+// 3 inside of findAllRoles.then() youre going to prompt and ask what role you want to assign to the employee
+
+// 4 call your db.method (updateEmpRole) and pass the id of the employee as well as the role id

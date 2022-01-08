@@ -1,3 +1,3 @@
-DROP DATABASE IF EXISTS department;
-CREATE DATABASE department;
-USE department;
+DROP DATABASE IF EXISTS employee_management;
+CREATE DATABASE employee_management;
+USE employee_management;
