@@ -165,7 +165,7 @@ function startQuestions() {
     }
 }
 
-function updateEmployeeRole() {
+function updateRole() {
     db.findAllEmployees()
         .then(([rows]) => {
             let employees = rows;
@@ -198,7 +198,7 @@ function updateEmployeeRole() {
                             let updatedEmployee = employees.filter(person => person.id === update.first_name)
                             db.updateEmployee(update)
                                 .then(() => console.log(`Changed ${updatedEmployee[0].first_name}'s role.`))
-                                .then(() => mainMenu())
+                                .then(() => startQuestions())
                         })
                 })
         })
