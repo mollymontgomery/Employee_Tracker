@@ -61,13 +61,13 @@ function startQuestions() {
             .then(() => startQuestions())
     }
 
-    function viewAllRoles() {
+    function viewRoles() {
         db.findAllRoles()
-        .then(([rows]) => {
-            let roles = rows;
-            console.table(roles);
-        })
-        .then(() => startQuestions())
+            .then(([rows]) => {
+                let roles = rows;
+                console.table(roles);
+            })
+            .then(() => startQuestions())
     }
 
     function viewEmployees() {
@@ -93,6 +93,7 @@ function startQuestions() {
                 .then(() => console.log(`Added ${name.department_name} to the database`))
                 .then(() => startQuestions())
         })
+    }
 
     function addEmployee() {
         db.findAllRoles()
@@ -101,32 +102,32 @@ function startQuestions() {
                 const rolesChoices = roles.map(({ id, job_title }) => ({
                     name: job_title,
                     value: id
-                }));
-        // get all roles and map over them inside the .then have your inquirer.prompt()
-            inquirer.prompt([
-            {
-                type: "input",
-                name: "first_name",
-                message: "What is the employee's first name?"
-            },
-            {
-                type: "input",
-                name: "last_name",
-                message: "What is the employee's last name?"
-            },
-            {
-                type: "list",
-                name: "role_id",
-                message: "What is the employee's role?",
-                choices: rolesChoices
-            }
-        ])
-        .then(employee => {
-            db.createEmployee(role)
-                .then(() => console.log(`Added ${employee.first_name} to the database`))
-                .then(() => startQuestions())
-    });
-    });
+                }))
+                // get all roles and map over them inside the .then have your inquirer.prompt()
+                inquirer.prompt([
+                    {
+                        type: "input",
+                        name: "first_name",
+                        message: "What is the employee's first name?"
+                    },
+                    {
+                        type: "input",
+                        name: "last_name",
+                        message: "What is the employee's last name?"
+                    },
+                    {
+                        type: "list",
+                        name: "role_id",
+                        message: "What is the employee's role?",
+                        choices: rolesChoices
+                    }
+                ])
+                    .then(employee => {
+                        db.createEmployee(employee)
+                            .then(() => console.log(`Added ${employee.first_name} ${employee.last_name} to the database`))
+                            .then(() => startQuestions())
+                    });
+            });
 
     }
 
@@ -159,9 +160,49 @@ function startQuestions() {
                         db.createRole(role)
                             .then(() => console.log(`Added ${role.job_title} to the database`))
                             .then(() => startQuestions())
+                    })
+            })
+    }
+}
+
+function updateEmployeeRole() {
+    db.findAllEmployees()
+        .then(([rows]) => {
+            let employees = rows;
+            const employeeChoices = employees.map(({ id, first_name }) => ({
+                name: first_name,
+                value: id
+            }));
+            db.findAllRoles()
+                .then(([rows]) => {
+                    let roles = rows;
+                    const rolesChoices = roles.map(({ id, job_title }) => ({
+                        name: job_title,
+                        value: id
+                    }))
+                    inquirer.prompt([
+                        {
+                            type: "list",
+                            name: "first_name",
+                            message: "Who is the employee that you would like to update?",
+                            choices: employeeChoices
+                        },
+                        {
+                            type: "list",
+                            name: "role_id",
+                            message: "Which new role would you like to assign them to?",
+                            choices: rolesChoices
+                        }
+                    ])
+                        .then(update => {
+                            let updatedEmployee = employees.filter(person => person.id === update.first_name)
+                            db.updateEmployee(update)
+                                .then(() => console.log(`Changed ${updatedEmployee[0].first_name}'s role.`))
+                                .then(() => mainMenu())
+                        })
                 })
-
-
+        })
+}
 
 
 // UPDATE EMP ROLE
