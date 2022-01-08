@@ -18,6 +18,12 @@ class DB {
         )
     }
 
+    findAllRoles(){
+        return this.connection.promise().query(
+            "SELECT * FROM roles"
+        )
+    }
+
     createDepartment(name){
         return this.connection.promise().query(
             "INSERT INTO department SET ?", name

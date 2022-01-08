@@ -3,7 +3,7 @@ const db = require("./db")
 
 init();
 
-function init(){
+function init() {
     console.log("Welcome to your employee management system!")
     startQuestions()
 }
@@ -54,28 +54,30 @@ function startQuestions() {
 
     function viewDepartments() {
         db.findAllDepartments()
-        .then(([rows])=>{
-            let departments = rows;
-            console.table(departments);
-        })
-        .then(()=> startQuestions())
+            .then(([rows]) => {
+                let departments = rows;
+                console.table(departments);
+            })
+            .then(() => startQuestions())
     }
 
     function viewAllRoles() {
-        db.query('SELECT roles.*, departments.dept_name AS department FROM roles LEFT JOIN departments ON roles.department_id = departments.id', (err, rows) => {
-            console.table(rows)
-            startQuestions();
+        db.findAllRoles()
+        .then(([rows]) => {
+            let roles = rows;
+            console.table(roles);
         })
+        .then(() => startQuestions())
     }
 
     function viewEmployees() {
-       db.findAllEmployees()
-       .then(([rows])=>{
-           let employees = rows;
+        db.findAllEmployees()
+            .then(([rows]) => {
+                let employees = rows;
 
-           console.table(employees);
-       })
-       .then(()=> startQuestions())
+                console.table(employees);
+            })
+            .then(() => startQuestions())
     }
 
     function addDepartment() {
@@ -85,75 +87,75 @@ function startQuestions() {
                 name: 'department_name',
                 message: 'What is the name of the department would you like to add?',
             }
-        ]).then(response =>{
+        ]).then(response => {
             let name = response;
             db.createDepartment(name)
-            .then(()=> console.log(`Added ${name.department_name} to the database`))
-            .then(()=> startQuestions())
+                .then(() => console.log(`Added ${name.department_name} to the database`))
+                .then(() => startQuestions())
         })
-        
 
-}
 
-function addEmployee() {
+    }
 
-    // get all roles and map over them inside the .then have your inquirer.prompt()
-    inquirer.prompt([
-        {
-            type: "input",
-            name: "first_name",
-            message: "What is the employee's first name?"
-        },
-        {
-            type: "input",
-            name: "last_name",
-            message: "What is the employee's last name?"
-        },
-        {
-            type: "list",
-            name: "role_id",
-            message: "What is the employee's role?",
-            choices: rolesChoices
-        }
-    ])
-        .then()
-}
+    function addEmployee() {
 
-function addRole() {
-    db.findAllDepartments()
-    .then(([rows])=>{
-        let departments = rows;
-        const departmentChoices = departments.map(({ id, department_name })=> ({
-            name: department_name,
-            value: id
-        }));
-
+        // get all roles and map over them inside the .then have your inquirer.prompt()
         inquirer.prompt([
             {
-                name: "job_title",
-                message: "What is the title of the role?"
+                type: "input",
+                name: "first_name",
+                message: "What is the employee's first name?"
             },
             {
-                name: "salary",
-                message: "What is the salary of the role?"
+                type: "input",
+                name: "last_name",
+                message: "What is the employee's last name?"
             },
             {
                 type: "list",
-                name: "department_id",
-                message: "What department does this role belong to?",
-                choices: departmentChoices
-            },
+                name: "role_id",
+                message: "What is the employee's role?",
+                choices: rolesChoices
+            }
         ])
-            .then(role =>{
-                db.createRole(role)
-                .then(()=> console.log(`Added ${role.job_title} to the database`))
-            .then(()=> startQuestions())
+            .then()
+    }
+
+    function addRole() {
+        db.findAllDepartments()
+            .then(([rows]) => {
+                let departments = rows;
+                const departmentChoices = departments.map(({ id, department_name }) => ({
+                    name: department_name,
+                    value: id
+                }));
+
+                inquirer.prompt([
+                    {
+                        name: "job_title",
+                        message: "What is the title of the role?"
+                    },
+                    {
+                        name: "salary",
+                        message: "What is the salary of the role?"
+                    },
+                    {
+                        type: "list",
+                        name: "department_id",
+                        message: "What department does this role belong to?",
+                        choices: departmentChoices
+                    },
+                ])
+                    .then(role => {
+                        db.createRole(role)
+                            .then(() => console.log(`Added ${role.job_title} to the database`))
+                            .then(() => startQuestions())
+                    })
+
             })
 
-    })
-   
 
-}
+    }
 
 }
 
