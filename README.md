@@ -15,13 +15,19 @@
   ## Installation
   In order to use this application you will need to run npm install to install the dependencies. Once done this will prompt you through the questions and tasks of the application.
 
+  Dependencies: <br>
+  1. Inquirer<br>
+  2. MySQL2<br>
+  3. Console.table<br>
+
   ## Usage
   Menu leads the user through prompts to update the employee management information.
 
   ## Credits
-  W3 Schools
-  Brian Gearty - My tutor
-  Ronya Gettis - Classmate
+  W3 Schools<br>
+  Stack Overflow<br>
+  Brian Gearty - My tutor<br>
+  Ronya Gettis - Classmate<br>
 
 
   ## Questions
