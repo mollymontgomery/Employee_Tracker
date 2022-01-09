@@ -15,7 +15,7 @@ function startQuestions() {
         message: 'What would you like to do?',
         name: 'choice',
         choices: [
-            "View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update employee role", "Exit"
+            "View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update employee role", 
         ]
     }).then(function (answer) {
         //https://www.w3schools.com/js/js_switch.asp
@@ -35,7 +35,7 @@ function startQuestions() {
             case 'Add a role':
                 addRole();
                 break;
-            case 'Add Employee':
+            case 'Add an employee':
                 addEmployee();
                 break;
             case 'Update employee role':
@@ -44,10 +44,7 @@ function startQuestions() {
             case 'Delete employee':
                 deleteEmployee();
                 break;
-            case 'EXIT':
-                exitApp();
-                break;
-            default:
+            case 'default':
                 break;
         }
     })
@@ -202,6 +199,7 @@ function updateRole() {
                         })
                 })
         })
-}
+    }
+
 
 
