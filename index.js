@@ -205,12 +205,3 @@ function updateRole() {
 }
 
 
-// UPDATE EMP ROLE
-
-// 1 get all emps map over emps like youve done before
-
-// 2 findAllRoles and map over them 
-
-// 3 inside of findAllRoles.then() youre going to prompt and ask what role you want to assign to the employee
-
-// 4 call your db.method (updateEmpRole) and pass the id of the employee as well as the role id
